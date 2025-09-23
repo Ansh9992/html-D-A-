@@ -87,7 +87,7 @@
             color: #1e293b; /* slate-800 */
             align-self: flex-start;
         }
-        .dr-ruth-modal, .auth-modal, #ai-analysis-modal {
+        .ai-bot-modal, .auth-modal, #ai-analysis-modal {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
         .category-link.active-category {
@@ -161,8 +161,8 @@
                 <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('records', this)">Health Records</a>
             </div>
             <div id="header-auth-section" class="flex items-center space-x-4">
-                 <button class="hidden lg:flex items-center gap-2 text-teal-600 font-semibold" onclick="openDrRuthChat()">
-                    <i data-lucide="bot"></i> Ask Dr. Ruth
+                 <button class="hidden lg:flex items-center gap-2 text-teal-600 font-semibold" onclick="openDrNishiChat()">
+                    <i data-lucide="bot"></i> Ask Dr. Nishi
                 </button>
                 <button class="relative" onclick="navigateTo('cart')">
                     <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -189,7 +189,7 @@
             <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('community')">Community</a>
             <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('my_care_team')">My Care Team</a>
             <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('records')">Health Records</a>
-            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="openDrRuthChat()">Ask Dr. Ruth</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="openDrNishiChat()">Ask Dr. Nishi</a>
             <div class="px-4 py-3" id="mobile-auth-buttons">
                  <button class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" onclick="openAuthModal('login')">
                     Login / SignUp
@@ -424,9 +424,9 @@
                         <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Homeopathic Remedies', this)">Homeopathic Remedies</a></li>
                     </ul>
                     <hr class="my-6">
-                     <button onclick="openDrRuthChat()" class="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 flex items-center justify-center gap-2">
+                     <button onclick="openDrNishiChat()" class="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 flex items-center justify-center gap-2">
                         <i data-lucide="message-circle"></i>
-                        Ask Dr. Ruth
+                        Ask Dr. Nishi
                     </button>
                 </div>
 
@@ -745,34 +745,34 @@
 
     </main>
 
-    <!-- Dr. Ruth AI Chat Modal -->
-    <div id="dr-ruth-chat-modal" class="dr-ruth-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center opacity-0 pointer-events-none">
+    <!-- Dr. Nishi AI Chat Modal -->
+    <div id="dr-nishi-chat-modal" class="ai-bot-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center opacity-0 pointer-events-none">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl h-[90vh] flex flex-col transform scale-95 transition-transform">
             <!-- Header -->
             <div class="flex items-center justify-between p-4 border-b bg-slate-50 rounded-t-2xl">
                 <div class="flex items-center gap-3">
                     <img src="https://placehold.co/40x40/14b8a6/ffffff?text=AI" class="rounded-full">
                     <div>
-                        <h2 class="font-bold text-lg text-slate-800">Dr. Ruth</h2>
+                        <h2 class="font-bold text-lg text-slate-800">Dr. Nishi</h2>
                         <p class="text-sm text-green-600 font-semibold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Online</p>
                     </div>
                 </div>
-                <button onclick="closeDrRuthChat()" class="text-slate-500 hover:text-slate-800">
+                <button onclick="closeDrNishiChat()" class="text-slate-500 hover:text-slate-800">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             <!-- Chat Window -->
-            <div id="dr-ruth-chat-window" class="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
+            <div id="dr-nishi-chat-window" class="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
                 <!-- Initial Message -->
                 <div class="chat-bubble-ai p-3 rounded-lg max-w-md">
-                    Hello, I'm Dr. Ruth, your personal AI health assistant. I can help answer your medical questions, provide information on health conditions, and guide you through our services. How can I help you today?
+                    Hello, I'm Dr. Nishi, your personal AI health assistant. I can help answer your medical questions, provide information on health conditions, and guide you through our services. How can I help you today?
                 </div>
             </div>
             <!-- Input -->
             <div class="p-4 border-t bg-white rounded-b-2xl">
                 <div class="flex gap-2 items-center">
-                    <input type="text" id="dr-ruth-input" class="w-full p-3 border-slate-300 border rounded-lg focus:ring-2 focus:ring-teal-500" placeholder="Ask Dr. Ruth a question...">
-                    <button id="dr-ruth-send-button" onclick="chatWithDrRuth()" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold p-3 rounded-lg transition-transform transform active:scale-95">
+                    <input type="text" id="dr-nishi-input" class="w-full p-3 border-slate-300 border rounded-lg focus:ring-2 focus:ring-teal-500" placeholder="Ask Dr. Nishi a question...">
+                    <button id="dr-nishi-send-button" onclick="chatWithDrNishi()" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold p-3 rounded-lg transition-transform transform active:scale-95">
                         <i data-lucide="send-horizontal"></i>
                     </button>
                 </div>
@@ -794,8 +794,8 @@
     </div>
 
 
-    <!-- Dr. Ruth Floating Action Button -->
-    <button onclick="openDrRuthChat()" class="fixed bottom-6 right-6 bg-teal-500 text-white rounded-full p-4 shadow-lg hover:bg-teal-600 transition-all transform hover:scale-110 z-40">
+    <!-- Dr. Nishi Floating Action Button -->
+    <button onclick="openDrNishiChat()" class="fixed bottom-6 right-6 bg-teal-500 text-white rounded-full p-4 shadow-lg hover:bg-teal-600 transition-all transform hover:scale-110 z-40">
         <i data-lucide="bot"></i>
     </button>
     
@@ -1119,27 +1119,27 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // --- Dr. Ruth Chat ---
-        const drRuthModal = document.getElementById('dr-ruth-chat-modal');
-        const drRuthModalContent = drRuthModal.querySelector('div');
+        // --- Dr. Nishi Chat ---
+        const drNishiModal = document.getElementById('dr-nishi-chat-modal');
+        const drNishiModalContent = drNishiModal.querySelector('div');
 
-        function openDrRuthChat() {
-            drRuthModal.classList.remove('opacity-0', 'pointer-events-none');
-            drRuthModalContent.classList.remove('scale-95');
+        function openDrNishiChat() {
+            drNishiModal.classList.remove('opacity-0', 'pointer-events-none');
+            drNishiModalContent.classList.remove('scale-95');
         }
 
-        function closeDrRuthChat() {
-            drRuthModal.classList.add('opacity-0');
-            drRuthModalContent.classList.add('scale-95');
+        function closeDrNishiChat() {
+            drNishiModal.classList.add('opacity-0');
+            drNishiModalContent.classList.add('scale-95');
             setTimeout(() => {
-                drRuthModal.classList.add('pointer-events-none');
+                drNishiModal.classList.add('pointer-events-none');
             }, 300);
         }
         
-        async function chatWithDrRuth() {
-            const chatInput = document.getElementById('dr-ruth-input');
-            const chatWindow = document.getElementById('dr-ruth-chat-window');
-            const sendButton = document.getElementById('dr-ruth-send-button');
+        async function chatWithDrNishi() {
+            const chatInput = document.getElementById('dr-nishi-input');
+            const chatWindow = document.getElementById('dr-nishi-chat-window');
+            const sendButton = document.getElementById('dr-nishi-send-button');
             const userQuery = chatInput.value;
 
             if (!userQuery.trim()) return;
@@ -1161,7 +1161,27 @@
             const apiKey = ""; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-            const systemPrompt = `You are Dr. Ruth, a highly advanced, empathetic, and knowledgeable AI medical assistant from D&A Healthcare...`; // Same prompt as before
+            const systemPrompt = `You are Dr. Nishi, a highly advanced, empathetic, and knowledgeable AI medical assistant from D&A Healthcare. Your persona is that of a wise, patient, and friendly doctor who is also a great conversationalist. Your primary goal is to assist users and make them feel comfortable, encouraging them to spend time on the website.
+
+**Your Core Responsibilities:**
+1.  **Medical Information:** Provide detailed, accurate, and easy-to-understand information about medical conditions, symptoms, treatments, medications, and healthy living. Break down complex topics into simple terms.
+2.  **Conversational Engagement:** You are not just a Q&A bot. Engage in natural, flowing conversations. Ask follow-up questions, show empathy ('I understand that must be concerning'), and remember the context of the conversation. If the user wants to chat about something non-medical, you can engage briefly before gently guiding them back to health topics.
+3.  **Triage & Guidance (Not Diagnosis):** You can help users understand their symptoms and suggest the right type of specialist to consult (e.g., 'For persistent joint pain, a Rheumatologist would be the right specialist to see.'). You can explain what different specialists do.
+4.  **Website Guide:** You can guide users on how to use the D&A Healthcare website ('You can book an appointment with a cardiologist right from our "Find Doctors" page.').
+
+**Strict Prohibitions (You MUST follow these rules):**
+* **NO DIAGNOSES:** Never, under any circumstances, provide a diagnosis. Do not say 'You might have...' or 'It sounds like you have...'. Instead, say 'Those symptoms are commonly associated with several conditions, and it's best to see a doctor for a proper diagnosis.'
+* **NO PRESCRIPTIONS:** Never prescribe or recommend specific dosages of medication. You can provide information about a drug if asked, but you cannot tell a user to take it.
+* **NO EMERGENCIES:** If a user mentions a medical emergency (e.g., 'chest pain', 'difficulty breathing', 'severe bleeding'), you must IMMEDIATELY and CLEARLY instruct them to contact local emergency services or go to the nearest hospital. Do not attempt to give advice.
+
+**Mandatory Disclaimer:**
+* At the end of EVERY single medical-related response, you MUST include this exact disclaimer: '***Disclaimer: I am an AI assistant, not a real doctor. This information is for educational purposes only and should not be considered medical advice. Please consult a qualified healthcare professional for any health concerns.***'
+
+**Contextual Information:**
+* The current date is Tuesday, September 23, 2025.
+* Your location is Gwalior, Madhya Pradesh, India. You can use this to provide locally relevant context if appropriate, but do not overemphasize it.
+
+Okay, let's start the conversation. Be warm and welcoming.`;
 
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -1186,15 +1206,16 @@
                 loadingDiv.innerHTML = responseText;
 
             } catch (error) {
-                console.error("Dr. Ruth API Error:", error);
+                console.error("Dr. Nishi API Error:", error);
                 loadingDiv.innerHTML = "I'm having trouble connecting right now. Please try again later.";
             } finally {
                 chatWindow.scrollTop = chatWindow.scrollHeight;
                 sendButton.disabled = false;
             }
         }
+        window.chatWithDrNishi = chatWithDrNishi;
         
-        document.getElementById('dr-ruth-input').addEventListener('keypress', function (e) { if (e.key === 'Enter') chatWithDrRuth(); });
+        document.getElementById('dr-nishi-input').addEventListener('keypress', function (e) { if (e.key === 'Enter') chatWithDrNishi(); });
 
         // --- Gemini API Symptom Analyzer ---
         async function analyzeSymptoms() { /* ... same as before ... */ }
