@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&A Healthcare - Your Complete Health Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* teal-50 */
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #14b8a6; /* teal-500 */
+            border-bottom: 2px solid #14b8a6;
+        }
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .hero-bg {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background-image: linear-gradient(to right, #ccfbf1, #a7f3d0);
+        }
+        .feature-card, .doctor-card, .record-card, .plan-card, .package-card, .group-card, .article-card, .surgery-card {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: card-reveal 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .feature-card:hover, .plan-card:hover, .package-card:hover, .group-card:hover, .article-card:hover, .surgery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .pharmacy-tab {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pharmacy-tab.active {
+            border-color: #14b8a6; /* teal-500 */
+            color: #14b8a6; /* teal-500 */
+            background-color: #ccfbf1; /* teal-100 */
+        }
+        .pharmacy-content {
+            display: none;
+        }
+        .pharmacy-content.active {
+            display: grid;
+        }
+        .records-content {
+            display: none;
+        }
+        .records-content.active {
+            display: block;
+        }
+        .loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #14b8a6; /* Teal */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        .chat-bubble-user {
+            background-color: #14b8a6; /* teal-500 */
+            color: white;
+            align-self: flex-end;
+        }
+        .chat-bubble-ai {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #1e293b; /* slate-800 */
+            align-self: flex-start;
+        }
+        .dr-ruth-modal, .auth-modal, #ai-analysis-modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .category-link.active-category {
+            color: #14b8a6; /* teal-500 */
+            font-weight: 600;
+        }
+        .pagination-btn {
+            cursor: pointer;
+        }
+        .pagination-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .care-team-btn.favorited svg {
+            fill: #ef4444; /* red-500 */
+            color: #ef4444;
+        }
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #22c55e; /* green-500 */
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .article-content h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700; /* font-bold */
+            margin-top: 1.5rem; /* mt-6 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .article-content p {
+            margin-bottom: 1rem; /* mb-4 */
+            line-height: 1.6;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes card-reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-teal-50 text-slate-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2" onclick="navigateTo('home')">
+                <div class="bg-teal-500 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                </div>
+                <span class="text-2xl font-bold text-teal-600">D&A <span class="font-normal text-slate-600">Healthcare</span></span>
+            </a>
+            <div class="hidden lg:flex items-center space-x-6">
+                <a class="nav-link active font-medium text-slate-700 pb-2" onclick="navigateTo('home', this)">Home</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('appointments', this)">Find Doctors</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('surgeries', this)">Book Surgeries</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('pharmacy', this)">Pharmacy</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('health_circle', this)">Health Circle</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('articles', this)">Health Articles</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('community', this)">Community</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('my_care_team', this)">My Care Team</a>
+                <a class="nav-link font-medium text-slate-700 pb-2" onclick="navigateTo('records', this)">Health Records</a>
+            </div>
+            <div id="header-auth-section" class="flex items-center space-x-4">
+                 <button class="hidden lg:flex items-center gap-2 text-teal-600 font-semibold" onclick="openDrRuthChat()">
+                    <i data-lucide="bot"></i> Ask Dr. Ruth
+                </button>
+                <button class="relative" onclick="navigateTo('cart')">
+                    <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <div id="desktop-auth-buttons">
+                    <button class="hidden lg:block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" onclick="openAuthModal('login')">
+                        Login / SignUp
+                    </button>
+                </div>
+                <button class="lg:hidden" id="mobile-menu-button">
+                    <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-slate-200">
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('home')">Home</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('appointments')">Find Doctors</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('surgeries')">Book Surgeries</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('pharmacy')">Pharmacy</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('health_circle')">Health Circle</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('articles')">Health Articles</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('community')">Community</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('my_care_team')">My Care Team</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="navigateTo('records')">Health Records</a>
+            <a class="block py-3 px-4 text-slate-700 hover:bg-slate-100" onclick="openDrRuthChat()">Ask Dr. Ruth</a>
+            <div class="px-4 py-3" id="mobile-auth-buttons">
+                 <button class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" onclick="openAuthModal('login')">
+                    Login / SignUp
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 lg:px-8 py-8">
+        
+        <!-- Home Page Section -->
+        <section id="home" class="page-section active">
+            <!-- Hero Section -->
+            <div class="hero-bg rounded-2xl p-8 md:p-12 mb-12 flex flex-col md:flex-row items-center shadow-lg">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h1 class="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">Your Health, Our Priority.</h1>
+                    <p class="mt-4 text-lg text-slate-700">Comprehensive healthcare services at your fingertips. From doctor appointments to at-home care, we support you and our local independent doctors.</p>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center md:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-teal-500/30 transition-all transform hover:scale-105" onclick="navigateTo('appointments')">Book an Appointment</button>
+                        <button class="bg-white/80 hover:bg-white text-teal-600 font-bold py-3 px-6 rounded-lg border border-teal-500 shadow-lg shadow-slate-300/30 transition-all transform hover:scale-105" onclick="navigateTo('pharmacy')">Order Medicines</button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 mt-8 md:mt-0">
+                    <img src="Gemini_Generated_Image_ck97vkck97vkck97.png" alt="Healthcare Professionals" class="rounded-lg shadow-2xl">
+                </div>
+            </div>
+            
+            <!-- Daily Wellness Tip -->
+            <div class="mb-12 bg-white rounded-2xl p-6 flex items-center gap-4 shadow-sm">
+                 <i data-lucide="sun" class="w-10 h-10 text-yellow-500"></i>
+                 <div>
+                    <h3 class="font-bold text-slate-800">Daily Wellness Tip</h3>
+                    <p class="text-slate-600">Start your day with a glass of warm water. It helps kickstart your metabolism and aids digestion.</p>
+                 </div>
+            </div>
+
+            <!-- How it works -->
+             <div class="py-12 bg-white rounded-2xl shadow-sm">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-8">Healthcare in 4 Easy Steps</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center px-8">
+                    <div class="flex flex-col items-center">
+                        <div class="bg-teal-100 rounded-full p-4 mb-4">
+                            <i data-lucide="search" class="w-10 h-10 text-teal-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-800">1. Find Your Doctor</h3>
+                        <p class="text-slate-600">Search from over 100 verified doctors by specialty, location, or name.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-teal-100 rounded-full p-4 mb-4">
+                            <i data-lucide="calendar-check" class="w-10 h-10 text-teal-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-800">2. Book an Appointment</h3>
+                        <p class="text-slate-600">Select a time slot that works for you and confirm your booking instantly.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-teal-100 rounded-full p-4 mb-4">
+                            <i data-lucide="video" class="w-10 h-10 text-teal-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-800">3. Consult Online/Offline</h3>
+                        <p class="text-slate-600">Connect with your doctor via video call or visit their clinic.</p>
+                    </div>
+                     <div class="flex flex-col items-center">
+                        <div class="bg-teal-100 rounded-full p-4 mb-4">
+                            <i data-lucide="file-plus-2" class="w-10 h-10 text-slate-600"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-800">4. Get Prescription & Reports</h3>
+                        <p class="text-slate-600">Receive digital prescriptions and lab reports directly on the app.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <h2 class="text-3xl font-bold text-center text-slate-900 my-12">Our Services</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card p-6 rounded-2xl text-center" onclick="navigateTo('appointments')">
+                    <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Book Appointments</h3>
+                    <p class="text-slate-600">Find trusted doctors, check waiting times, and book instantly. Emergency slots available.</p>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center" style="animation-delay: 0.1s;" onclick="navigateTo('at_home')">
+                    <i data-lucide="home" class="w-12 h-12 mx-auto text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">At-Home Care</h3>
+                    <p class="text-slate-600">Doctor/nurse visits, physiotherapy, lab tests & even portable X-Rays at your home.</p>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center" style="animation-delay: 0.2s;" onclick="navigateTo('pharmacy')">
+                    <i data-lucide="pilcrow" class="w-12 h-12 mx-auto text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Online Pharmacy</h3>
+                    <p class="text-slate-600">Medicines delivered to your door. Get advice from our expert pharmacists.</p>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center" style="animation-delay: 0.3s;" onclick="navigateTo('surgeries')">
+                    <i data-lucide="syringe" class="w-12 h-12 mx-auto text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Book Surgeries</h3>
+                    <p class="text-slate-600">Get assistance for day-care surgeries from trusted local hospitals and surgeons.</p>
+                </div>
+            </div>
+            
+            <!-- Our Difference Section -->
+            <div class="mt-16 bg-white rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 shadow-sm">
+                <div class="md:w-1/2">
+                    <img src="successful-indian-doctors-team-standing-together_601128-2630-962906333.jpg" alt="Local Doctor" class="rounded-lg shadow-xl">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold text-slate-900">What Makes Us Different?</h2>
+                    <p class="mt-4 text-slate-600">We believe in empowering healthcare at the local level. Unlike other platforms, we champion independent doctors and local healthcare providers. By connecting you with them, we help them grow their practice without being dependent on large hospitals or corporations.</p>
+                    <p class="mt-4 font-semibold text-teal-700">When you choose D&A Healthcare, you're not just choosing better health for yourself—you're supporting your community's healthcare backbone.</p>
+                </div>
+            </div>
+
+            <!-- Co-founders Section -->
+            <div class="mt-16">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-8">Meet Our Founders</h2>
+                <div class="flex flex-col md:flex-row justify-center gap-12">
+                    <!-- Dheeraj Thakur -->
+                    <div class="text-center">
+                        <img src="WhatsApp Image 2025-09-23 at 12.02.44_67582986.jpg" class="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-teal-200 shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800">Mr. Dheeraj Thakur</h3>
+                        <p class="text-slate-600 font-medium">Co-Founder & CEO</p>
+                        <p class="max-w-xs mx-auto mt-2 text-slate-500">A visionary leader dedicated to making quality healthcare accessible and affordable for everyone in India.</p>
+                    </div>
+                    <!-- Ansh Thakur -->
+                    <div class="text-center">
+                        <img src="my pic.jpg" class="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-teal-200 shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800">Mr. Ansh Thakur</h3>
+                        <p class="text-slate-600 font-medium">Co-Founder & CTO</p>
+                        <p class="max-w-xs mx-auto mt-2 text-slate-500">The technology architect building a robust platform to connect patients with the care they need, seamlessly.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonials Section -->
+            <div class="mt-16 bg-white/50 rounded-2xl p-8 md:p-12 shadow-sm">
+                <h2 class="text-3xl font-bold text-center text-slate-900 mb-8">What Our Patients Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <p class="text-slate-600 italic">"Booking a lab test from home was so easy. The phlebotomist was professional and I got my reports on the app the same day. Highly recommended!"</p>
+                        <p class="mt-4 font-bold text-right text-slate-800">- Sunita K.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <p class="text-slate-600 italic">"I found the perfect physiotherapist for my mother through D&A. The option to choose a female therapist made her very comfortable."</p>
+                        <p class="mt-4 font-bold text-right text-slate-800">- Amit S.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <p class="text-slate-600 italic">"The medicine delivery is a lifesaver. I get my regular medicines every month without fail. The discounts are a great bonus!"</p>
+                        <p class="mt-4 font-bold text-right text-slate-800">- Riya M.</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- AYUSH Section -->
+            <div class="mt-16 bg-green-100/50 rounded-2xl p-8 md:p-12 border border-green-200">
+                <h2 class="text-3xl font-bold text-center text-green-800">Embrace Traditional Healing</h2>
+                <p class="text-center mt-2 text-green-700 max-w-3xl mx-auto">Afraid of modern medicine? We connect you with certified Ayurvedic and Homeopathic doctors for secure, traditional treatments and medicines.</p>
+                <div class="mt-8 flex justify-center space-x-4">
+                     <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-green-500/30 transition-transform transform hover:scale-105" onclick="navigateTo('pharmacy', null, 'ayurveda')">Find Ayurvedic Medicines</button>
+                    <button class="bg-white hover:bg-green-50 text-green-700 font-bold py-3 px-6 rounded-lg border border-green-600 shadow-lg transition-transform transform hover:scale-105" onclick="navigateTo('pharmacy', null, 'homeopathy')">Explore Homeopathy</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctor Appointments Section -->
+        <section id="appointments" class="page-section">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Find and Book a Doctor's Appointment</h1>
+            <p class="text-slate-600 mb-8">Search our network of verified doctors or use our AI assistant to find the right specialist.</p>
+            
+            <!-- Gemini AI Symptom Analyzer -->
+            <div id="gemini-symptom-analyzer" class="bg-teal-100/50 border-2 border-teal-200 rounded-xl p-6 mb-10">
+                <div class="flex items-center gap-4">
+                    <i data-lucide="sparkles" class="w-10 h-10 text-teal-500"></i>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">AI Symptom Analyzer</h2>
+                        <p class="text-slate-600">Don't know which doctor to consult? Describe your symptoms below.</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <textarea id="symptom-input" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" rows="3" placeholder="For example: I have a persistent headache, dizziness, and slight nausea for the past 3 days..."></textarea>
+                </div>
+                <div class="mt-4">
+                    <button id="analyze-button" onclick="analyzeSymptoms()" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center gap-2 shadow-md shadow-teal-500/30">
+                        ✨ Analyze Symptoms & Get Recommendation
+                    </button>
+                </div>
+                <div id="symptom-result" class="mt-5 bg-white p-4 rounded-lg shadow-inner" style="display: none;">
+                    <!-- AI response will be injected here -->
+                </div>
+                 <p class="text-xs text-slate-500 mt-4"><i data-lucide="alert-triangle" class="inline w-3 h-3 mr-1"></i>Disclaimer: This tool is for informational purposes only and does not constitute medical advice. Please consult with a qualified healthcare professional for any health concerns.</p>
+            </div>
+
+
+            <!-- Search and Filter Bar -->
+            <div class="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-col md:flex-row gap-4 items-center">
+                <input type="text" placeholder="Search doctor, specialty..." class="w-full md:flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                <select class="w-full md:w-auto p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                    <option>Consultation Type</option>
+                    <option>In-Clinic</option>
+                    <option>Video Call</option>
+                </select>
+                <select class="w-full md:w-auto p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                    <option>All Genders</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+                <button class="w-full md:w-auto bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-6 rounded-lg">Search</button>
+            </div>
+
+            <!-- Doctor Listing -->
+            <div id="doctor-listing-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Doctor Cards will be injected here by JS -->
+            </div>
+            <p class="text-center mt-8 text-slate-600">...and many more. Use search to find the perfect doctor for you.</p>
+        </section>
+
+        <!-- Pharmacy Section -->
+        <section id="pharmacy" class="page-section">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">D&A Pharmacy</h1>
+            <p class="text-slate-600 mb-8">A comprehensive range of Allopathy, Ayurveda, and Homeopathy medicines, delivered to your doorstep.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Filters Sidebar -->
+                <div class="md:col-span-1 bg-white p-6 rounded-xl shadow-md self-start">
+                    <h3 class="font-bold text-lg mb-4 text-slate-800">Categories</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li><a href="#" class="category-link active-category font-semibold text-teal-600" onclick="filterByCategory('All', this)">Show All</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Pain Relief', this)">Pain Relief</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Cardiac Care', this)">Cardiac Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Stomach Care', this)">Stomach Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Vitamins & Supplements', this)">Vitamins & Supplements</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Diabetes Care', this)">Diabetes Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Skin Care', this)">Skin Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Personal Care', this)">Personal Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Baby Care', this)">Baby Care</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Herbal Wellness', this)">Herbal Wellness</a></li>
+                        <li><a href="#" class="category-link hover:text-teal-500" onclick="filterByCategory('Homeopathic Remedies', this)">Homeopathic Remedies</a></li>
+                    </ul>
+                    <hr class="my-6">
+                     <button onclick="openDrRuthChat()" class="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle"></i>
+                        Ask Dr. Ruth
+                    </button>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="md:col-span-3">
+                    <!-- Search Bar for Pharmacy -->
+                    <div class="mb-6 relative">
+                        <input type="text" placeholder="Search from over 10,000 medicines & products..." class="w-full p-4 pl-12 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="flex border-b mb-6">
+                        <button class="pharmacy-tab active font-semibold py-2 px-4 border-b-2" onclick="switchPharmacyTab('allopathy', this)">Allopathy</button>
+                        <button class="pharmacy-tab font-semibold py-2 px-4 border-b-2 border-transparent text-slate-500" onclick="switchPharmacyTab('ayurveda', this)">Ayurveda</button>
+                        <button class="pharmacy-tab font-semibold py-2 px-4 border-b-2 border-transparent text-slate-500" onclick="switchPharmacyTab('homeopathy', this)">Homeopathy</button>
+                    </div>
+
+                    <!-- Allopathy Content -->
+                    <div id="allopathy-content" class="pharmacy-content active grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Allopathy products will be injected by JS -->
+                    </div>
+                    
+                    <!-- Ayurveda Content -->
+                    <div id="ayurveda-content" class="pharmacy-content grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                       <!-- Ayurveda products will be injected by JS -->
+                    </div>
+                    
+                    <!-- Homeopathy Content -->
+                    <div id="homeopathy-content" class="pharmacy-content grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Homeopathy products will be injected by JS -->
+                    </div>
+                     <p id="product-count-message" class="text-center mt-8 text-slate-600">Showing a selection of our 10,000+ products. Use search for specific needs.</p>
+                     <!-- Pagination -->
+                    <div id="pagination-container" class="mt-8 flex justify-center items-center space-x-2">
+                        <!-- Pagination will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Digital Health Records Section -->
+        <section id="records" class="page-section">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Your Digital Health Records</h1>
+            <p class="text-slate-600 mb-8">Securely access your prescriptions and lab reports anytime.</p>
+        
+            <!-- Tab Navigation for Records -->
+            <div class="flex border-b mb-6">
+                <button class="pharmacy-tab active font-semibold py-2 px-4 border-b-2" onclick="switchRecordsTab('prescriptions', this)">Prescriptions</button>
+                <button class="pharmacy-tab font-semibold py-2 px-4 border-b-2 border-transparent text-slate-500" onclick="switchRecordsTab('reports', this)">Lab Reports</button>
+            </div>
+        
+            <!-- Prescriptions Content -->
+            <div id="prescriptions-content" class="records-content active space-y-6">
+                <!-- Example Prescription 1 -->
+                <div class="record-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                        <div>
+                            <p class="text-sm text-slate-500">20 Sep, 2025</p>
+                            <h3 class="text-xl font-bold text-slate-800">Consultation with Dr. Vikram Singh</h3>
+                            <p class="text-teal-600 font-medium">General Physician</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <button class="bg-blue-100 text-blue-800 py-2 px-3 rounded-lg font-semibold hover:bg-blue-200 text-sm flex items-center gap-2" onclick="showToast('Reminder set for Paracetamol, Cetirizine, Vitamin C')"><i data-lucide="bell-plus" class="w-4 h-4"></i> Set Reminder</button>
+                            <button class="bg-teal-500 text-white py-2 px-3 rounded-lg font-semibold hover:bg-teal-600 text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</button>
+                        </div>
+                    </div>
+                    <div class="border-t my-4"></div>
+                    <h4 class="font-semibold mb-2 text-slate-700">Medicines Prescribed:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600">
+                        <li><strong>Paracetamol 500mg:</strong> 1 tablet after breakfast and dinner for 3 days.</li>
+                        <li><strong>Cetirizine 10mg:</strong> 1 tablet at night for 5 days.</li>
+                        <li><strong>Vitamin C 500mg:</strong> 1 tablet daily for 1 week.</li>
+                    </ul>
+                </div>
+            </div>
+        
+            <!-- Lab Reports Content -->
+            <div id="reports-content" class="records-content space-y-6">
+                 <!-- Example Lab Report 1 -->
+                 <div class="record-card p-6 rounded-xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                        <div>
+                            <p class="text-sm text-slate-500">18 Sep, 2025</p>
+                            <h3 class="text-xl font-bold text-slate-800">Complete Blood Count (CBC)</h3>
+                            <p class="text-green-600 font-semibold flex items-center gap-2 mt-1"><i data-lucide="check-circle" class="w-4 h-4"></i> All values within normal range</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                             <button class="bg-purple-100 text-purple-800 py-2 px-3 rounded-lg font-semibold hover:bg-purple-200 text-sm flex items-center gap-2" onclick="analyzeLabReport('cbc')"><i data-lucide="sparkles" class="w-4 h-4"></i> Analyze with AI</button>
+                            <button class="bg-teal-500 text-white py-2 px-3 rounded-lg font-semibold hover:bg-teal-600 text-sm flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lab Tests Section -->
+        <section id="lab_tests" class="page-section">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Book Lab Tests</h1>
+            <p class="text-slate-600 mb-8">Don't worry about hospital visits. We collect samples from your home.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-xl mb-2 text-teal-700">Complete Blood Count (CBC)</h3>
+                    <p class="text-slate-600 mb-4">A comprehensive test to evaluate your overall health and detect a wide range of disorders.</p>
+                    <p class="text-2xl font-bold text-slate-800 mb-4">₹450</p>
+                    <button class="w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600" onclick="addToCart('test1', 'Complete Blood Count', 450)">Book Home Visit</button>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-xl mb-2 text-teal-700">Thyroid Profile (T3, T4, TSH)</h3>
+                    <p class="text-slate-600 mb-4">Measures the levels of thyroid hormones to check for thyroid gland problems.</p>
+                    <p class="text-2xl font-bold text-slate-800 mb-4">₹800</p>
+                    <button class="w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600" onclick="addToCart('test2', 'Thyroid Profile', 800)">Book Home Visit</button>
+                </div>
+                 <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-xl mb-2 text-teal-700">Stool Test (Routine)</h3>
+                    <p class="text-slate-600 mb-4">Fear no more. Our professionals ensure a hygienic and comfortable sample collection process at home.</p>
+                    <p class="text-2xl font-bold text-slate-800 mb-4">₹300</p>
+                    <button class="w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600" onclick="addToCart('test3', 'Stool Test (Routine)', 300)">Book Home Visit</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diagnostics at Home Section -->
+        <section id="diagnostics" class="page-section">
+             <h1 class="text-3xl font-bold text-slate-900 mb-2">Advanced Diagnostics, in Your Home</h1>
+             <p class="text-slate-600 mb-8">Skip the clinic queues. We bring advanced portable medical equipment to you for accurate and convenient testing.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card p-6 rounded-xl">
+                    <i data-lucide="activity" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Portable ECG Machine</h3>
+                    <p class="text-slate-600 mb-4">Get a quick and accurate reading of your heart's electrical activity. Essential for chest pain or palpitation assessment.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">Book ECG at Home</button>
+                </div>
+                <div class="feature-card p-6 rounded-xl" style="animation-delay: 0.1s;">
+                    <i data-lucide="album" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Portable Digital X-Ray</h3>
+                    <p class="text-slate-600 mb-4">High-quality digital X-rays for fractures, chest infections, and more, with instant results reviewed by radiologists.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">Book X-Ray at Home</button>
+                </div>
+                <div class="feature-card p-6 rounded-xl" style="animation-delay: 0.2s;">
+                    <i data-lucide="waves" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Portable Ultrasound</h3>
+                    <p class="text-slate-600 mb-4">For abdominal scans, pregnancy monitoring, and soft tissue imaging without leaving your home.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">Enquire Now</button>
+                </div>
+             </div>
+        </section>
+
+        <!-- At-Home Care Packages Section -->
+        <section id="at_home" class="page-section">
+             <h1 class="text-3xl font-bold text-slate-900 mb-2">Specialized At-Home Care Packages</h1>
+             <p class="text-slate-600 mb-8">Holistic care plans designed for your specific needs, delivered in the comfort of your home.</p>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="package-card p-6 rounded-xl flex flex-col">
+                    <i data-lucide="band-aid" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Post-Operative Care</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">Includes nurse visits for wound dressing, physiotherapy sessions, and delivery of prescribed medication.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">View Package</button>
+                </div>
+                <div class="package-card p-6 rounded-xl flex flex-col" style="animation-delay: 0.1s;">
+                    <i data-lucide="baby" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">New Mother & Baby Care</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">Post-natal check-ups, lactation consultation, and baby vaccination reminders and scheduling.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">View Package</button>
+                </div>
+                <div class="package-card p-6 rounded-xl flex flex-col" style="animation-delay: 0.2s;">
+                    <i data-lucide="heart-pulse" class="w-12 h-12 text-teal-500 mb-4"></i>
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Chronic Diabetes Management</h3>
+                    <p class="text-slate-600 mb-4 flex-grow">Monthly blood sugar tests, quarterly diabetologist consults, and automated medicine refills.</p>
+                    <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">View Package</button>
+                </div>
+             </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart" class="page-section">
+            <h1 class="text-3xl font-bold text-slate-900 mb-8">Your Cart</h1>
+            <div id="cart-items-container" class="space-y-4">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div id="cart-summary" class="mt-8 p-6 bg-white rounded-xl shadow-md">
+                 <!-- Cart summary will be dynamically inserted here -->
+            </div>
+            <div id="empty-cart-message" class="text-center py-12">
+                <i data-lucide="shopping-cart" class="w-24 h-24 mx-auto text-slate-300"></i>
+                <p class="mt-4 text-xl text-slate-500">Your cart is empty.</p>
+                <button class="mt-6 bg-teal-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-teal-600" onclick="navigateTo('pharmacy')">Start Shopping</button>
+            </div>
+        </section>
+
+        <!-- Health Circle Section -->
+        <section id="health_circle" class="page-section">
+            <h1 class="text-4xl font-bold text-center text-slate-900">Join the D&A Health Circle</h1>
+            <p class="text-slate-600 mb-12 text-center text-lg max-w-2xl mx-auto">One subscription for all your healthcare needs. Save money and get proactive care for you and your family.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                <!-- Solo Plan -->
+                <div class="plan-card p-8 rounded-2xl flex flex-col h-full">
+                    <h3 class="text-2xl font-bold text-slate-800">Solo</h3>
+                    <p class="text-slate-600">For Individuals</p>
+                    <p class="text-4xl font-bold my-4 text-slate-900">₹299 <span class="text-lg font-normal text-slate-500">/month</span></p>
+                    <ul class="space-y-3 text-slate-600 mt-4 mb-8 flex-grow">
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>2 Free Online Consults</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>Flat 15% off Medicines</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>Priority Booking</span></li>
+                    </ul>
+                    <button class="w-full bg-slate-200 text-slate-800 font-bold py-3 rounded-lg hover:bg-slate-300">Choose Plan</button>
+                </div>
+                <!-- Family Plan -->
+                <div class="plan-card p-8 rounded-2xl flex flex-col h-full border-4 border-teal-500 relative shadow-2xl">
+                    <p class="absolute top-0 -translate-y-1/2 bg-teal-500 text-white text-sm font-bold px-3 py-1 rounded-full">Most Popular</p>
+                    <h3 class="text-2xl font-bold text-slate-800">Family</h3>
+                    <p class="text-slate-600">Up to 4 members</p>
+                    <p class="text-4xl font-bold my-4 text-teal-600">₹599 <span class="text-lg font-normal text-slate-500">/month</span></p>
+                    <ul class="space-y-3 text-slate-600 mt-4 mb-8 flex-grow">
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>5 Free Online Consults</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>Flat 20% off Medicines</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>1 Free Lab Test/Quarter</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="gift" class="w-5 h-5 text-green-500 mt-1"></i> <span><b>Freebie:</b> Monthly Wellness Kit (Choose Men's/Women's essentials like BP tablets or sanitary pads)</span></li>
+                    </ul>
+                    <button class="w-full bg-teal-500 text-white font-bold py-3 rounded-lg hover:bg-teal-600">Choose Plan</button>
+                </div>
+                <!-- Senior Care Plan -->
+                <div class="plan-card p-8 rounded-2xl flex flex-col h-full">
+                    <h3 class="text-2xl font-bold text-slate-800">Senior Care</h3>
+                    <p class="text-slate-600">For elderly members</p>
+                    <p class="text-4xl font-bold my-4 text-slate-900">₹799 <span class="text-lg font-normal text-slate-500">/month</span></p>
+                    <ul class="space-y-3 text-slate-600 mt-4 mb-8 flex-grow">
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>Unlimited Online Consults</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>Flat 25% off Medicines</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" class="w-5 h-5 text-green-500 mt-1"></i> <span>1 Annual Full-Body Checkup</span></li>
+                        <li class="flex items-start gap-3"><i data-lucide="gift" class="w-5 h-5 text-green-500 mt-1"></i> <span><b>Freebie:</b> Monthly Senior Care Kit (Includes essentials like supplements & monitoring supplies)</span></li>
+                    </ul>
+                    <button class="w-full bg-slate-200 text-slate-800 font-bold py-3 rounded-lg hover:bg-slate-300">Choose Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="community" class="page-section">
+            <h1 class="text-4xl font-bold text-center text-slate-900">Community & Support Groups</h1>
+            <p class="text-slate-600 mb-12 text-center text-lg max-w-2xl mx-auto">Connect with others who understand. Share experiences and find support in our secure, moderated groups.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group-card p-6 rounded-xl flex flex-col">
+                    <h3 class="text-xl font-bold text-slate-800">Managing Diabetes</h3>
+                    <p class="text-slate-500 text-sm">Moderated by Dr. R. Sharma</p>
+                    <p class="text-slate-600 my-4 flex-grow">Share diet tips, exercise routines, and experiences in managing blood sugar levels.</p>
+                    <div class="flex items-center text-sm text-slate-500"><i data-lucide="users" class="w-4 h-4 mr-2"></i> 1,204 members</div>
+                    <button class="w-full mt-4 bg-teal-500 text-white font-bold py-2 rounded-lg hover:bg-teal-600">Join Group</button>
+                </div>
+                 <div class="group-card p-6 rounded-xl flex flex-col" style="animation-delay: 0.1s;">
+                    <h3 class="text-xl font-bold text-slate-800">Parenting & Child Health</h3>
+                    <p class="text-slate-500 text-sm">Moderated by Dr. Priya K.</p>
+                    <p class="text-slate-600 my-4 flex-grow">A group for new parents to discuss child wellness, nutrition, and milestones.</p>
+                    <div class="flex items-center text-sm text-slate-500"><i data-lucide="users" class="w-4 h-4 mr-2"></i> 876 members</div>
+                    <button class="w-full mt-4 bg-teal-500 text-white font-bold py-2 rounded-lg hover:bg-teal-600">Join Group</button>
+                </div>
+                 <div class="group-card p-6 rounded-xl flex flex-col" style="animation-delay: 0.2s;">
+                    <h3 class="text-xl font-bold text-slate-800">Mental Wellness Support</h3>
+                    <p class="text-slate-500 text-sm">Moderated by a certified therapist</p>
+                    <p class="text-slate-600 my-4 flex-grow">A safe space to discuss anxiety, stress, and mental well-being with peers.</p>
+                    <div class="flex items-center text-sm text-slate-500"><i data-lucide="users" class="w-4 h-4 mr-2"></i> 2,150 members</div>
+                    <button class="w-full mt-4 bg-teal-500 text-white font-bold py-2 rounded-lg hover:bg-teal-600">Join Group</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Care Team Section -->
+        <section id="my_care_team" class="page-section">
+            <h1 class="text-4xl font-bold text-slate-900">My Care Team</h1>
+            <p class="text-slate-600 mb-8">Your personal network of trusted local doctors. Book appointments and manage care seamlessly.</p>
+            <div id="care-team-container">
+                <!-- Content will be injected by JS based on login state -->
+            </div>
+        </section>
+
+         <!-- Book Surgeries Section -->
+        <section id="surgeries" class="page-section">
+            <h1 class="text-4xl font-bold text-center text-slate-900">Book Day-Care Surgeries</h1>
+            <p class="text-slate-600 mb-12 text-center text-lg max-w-2xl mx-auto">Hassle-free assistance for day-care and elective surgeries with our network of top-rated local hospitals and surgeons.</p>
+             <div id="surgeries-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Surgery cards will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- Health Articles Section -->
+        <section id="articles" class="page-section">
+             <h1 class="text-4xl font-bold text-center text-slate-900">Health & Wellness Articles</h1>
+            <p class="text-slate-600 mb-12 text-center text-lg max-w-2xl mx-auto">Read expert-verified articles to stay informed and manage your health better.</p>
+             <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Article cards will be injected by JS -->
+             </div>
+        </section>
+
+        <!-- Article Detail Section -->
+        <section id="article_detail" class="page-section">
+            <div id="article-detail-content">
+                <!-- Full article content will be injected here -->
+            </div>
+        </section>
+
+
+        <!-- Doctor Profile Section -->
+        <section id="doctor_profile" class="page-section">
+            <div id="doctor-profile-content">
+                <!-- Doctor profile content will be injected here -->
+            </div>
+        </section>
+        
+        <!-- Surgery Detail Section -->
+        <section id="surgery_detail" class="page-section">
+            <div id="surgery-detail-content">
+                <!-- Full surgery content will be injected here -->
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Dr. Ruth AI Chat Modal -->
+    <div id="dr-ruth-chat-modal" class="dr-ruth-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center opacity-0 pointer-events-none">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl h-[90vh] flex flex-col transform scale-95 transition-transform">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 border-b bg-slate-50 rounded-t-2xl">
+                <div class="flex items-center gap-3">
+                    <img src="https://placehold.co/40x40/14b8a6/ffffff?text=AI" class="rounded-full">
+                    <div>
+                        <h2 class="font-bold text-lg text-slate-800">Dr. Ruth</h2>
+                        <p class="text-sm text-green-600 font-semibold flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Online</p>
+                    </div>
+                </div>
+                <button onclick="closeDrRuthChat()" class="text-slate-500 hover:text-slate-800">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <!-- Chat Window -->
+            <div id="dr-ruth-chat-window" class="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
+                <!-- Initial Message -->
+                <div class="chat-bubble-ai p-3 rounded-lg max-w-md">
+                    Hello, I'm Dr. Ruth, your personal AI health assistant. I can help answer your medical questions, provide information on health conditions, and guide you through our services. How can I help you today?
+                </div>
+            </div>
+            <!-- Input -->
+            <div class="p-4 border-t bg-white rounded-b-2xl">
+                <div class="flex gap-2 items-center">
+                    <input type="text" id="dr-ruth-input" class="w-full p-3 border-slate-300 border rounded-lg focus:ring-2 focus:ring-teal-500" placeholder="Ask Dr. Ruth a question...">
+                    <button id="dr-ruth-send-button" onclick="chatWithDrRuth()" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold p-3 rounded-lg transition-transform transform active:scale-95">
+                        <i data-lucide="send-horizontal"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Lab Report Analysis Modal -->
+    <div id="ai-analysis-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center opacity-0 pointer-events-none">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col transform scale-95 transition-transform">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2"><i data-lucide="sparkles" class="text-purple-500"></i> AI Lab Report Analysis</h2>
+                <button onclick="closeAiAnalysisModal()" class="text-slate-500 hover:text-slate-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div id="ai-analysis-content" class="p-6 max-h-[60vh] overflow-y-auto">
+                <!-- AI content injected here -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Dr. Ruth Floating Action Button -->
+    <button onclick="openDrRuthChat()" class="fixed bottom-6 right-6 bg-teal-500 text-white rounded-full p-4 shadow-lg hover:bg-teal-600 transition-all transform hover:scale-110 z-40">
+        <i data-lucide="bot"></i>
+    </button>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 mt-16">
+        <div class="container mx-auto px-4 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">D&A Healthcare</h3>
+                    <p class="text-slate-400">Your complete partner in health and wellness. We empower local doctors and bring healthcare to you.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('home')">Home</a></li>
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('appointments')">Find Doctors</a></li>
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('pharmacy')">Pharmacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Our Services</h3>
+                     <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('at_home')">At-Home Care</a></li>
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('lab_tests')">Lab Tests</a></li>
+                        <li><a href="#" class="hover:text-teal-400" onclick="navigateTo('records')">Health Records</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Contact Us</h3>
+                    <p>support@dahealthcare.com</p>
+                    <p>1800-123-4567</p>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-slate-700 pt-6 text-center text-slate-400">
+                &copy; 2024 D&A Healthcare. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modals -->
+    <div id="auth-modal-container" class="auth-modal fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center opacity-0 pointer-events-none">
+        
+        <!-- Login Modal -->
+        <div id="login-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col transform scale-95 transition-transform">
+             <div class="flex items-center justify-between p-4 border-b">
+                <h2 class="font-bold text-lg text-slate-800">Login</h2>
+                <button onclick="closeAuthModal()" class="text-slate-500 hover:text-slate-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <input id="login-email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                    <input id="login-password" type="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div id="login-error" class="text-red-500 text-sm mt-2"></div>
+                <button onclick="handleLogin()" class="w-full mt-6 bg-teal-500 text-white font-bold py-3 rounded-lg hover:bg-teal-600">Login</button>
+                <p class="text-center text-sm text-slate-500 mt-4">
+                    Don't have an account? <a href="#" class="font-semibold text-teal-600 hover:underline" onclick="openAuthModal('signup')">Sign Up</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signup-modal" class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex-col transform scale-95 transition-transform" style="display: none;">
+             <div class="flex items-center justify-between p-4 border-b">
+                <h2 class="font-bold text-lg text-slate-800">Sign Up</h2>
+                <button onclick="closeAuthModal()" class="text-slate-500 hover:text-slate-800"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <input id="signup-name" type="text" placeholder="Full Name" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                    <input id="signup-email" type="email" placeholder="Email" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                    <input id="signup-password" type="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500">
+                </div>
+                 <div id="signup-error" class="text-red-500 text-sm mt-2"></div>
+                <button onclick="handleSignup()" class="w-full mt-6 bg-teal-500 text-white font-bold py-3 rounded-lg hover:bg-teal-600">Create Account</button>
+                 <p class="text-center text-sm text-slate-500 mt-4">
+                    Already have an account? <a href="#" class="font-semibold text-teal-600 hover:underline" onclick="openAuthModal('login')">Login</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        let app, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+        } catch (e) {
+            console.warn("Firebase config not set. Authentication will be simulated.");
+        }
+       
+        window.auth = auth; // Make auth globally available for UI updates
+
+        // --- AUTH UI MANAGEMENT ---
+        window.openAuthModal = (modalType) => {
+            const container = document.getElementById('auth-modal-container');
+            const loginModal = document.getElementById('login-modal');
+            const signupModal = document.getElementById('signup-modal');
+            
+            container.classList.remove('opacity-0', 'pointer-events-none');
+            
+            if (modalType === 'login') {
+                loginModal.style.display = 'flex';
+                signupModal.style.display = 'none';
+                loginModal.classList.remove('scale-95');
+            } else {
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'flex';
+                signupModal.classList.remove('scale-95');
+            }
+        };
+
+        window.closeAuthModal = () => {
+            const container = document.getElementById('auth-modal-container');
+            const loginModal = document.getElementById('login-modal');
+            const signupModal = document.getElementById('signup-modal');
+
+            container.classList.add('opacity-0');
+            loginModal.classList.add('scale-95');
+            signupModal.classList.add('scale-95');
+            setTimeout(() => {
+                container.classList.add('pointer-events-none');
+            }, 300);
+        };
+
+        const updateUIForAuthState = (user) => {
+            const desktopAuth = document.getElementById('desktop-auth-buttons');
+            const mobileAuth = document.getElementById('mobile-auth-buttons');
+
+            if (user) {
+                // User is signed in
+                const displayName = user.displayName || 'User';
+                desktopAuth.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="font-semibold text-slate-700">Hi, ${displayName}</span>
+                        <button onclick="handleLogout()" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Logout</button>
+                    </div>
+                `;
+                mobileAuth.innerHTML = `
+                    <div class="px-4 py-2 border-t">
+                         <p class="font-semibold text-slate-700 mb-2">Hi, ${displayName}</p>
+                         <button onclick="handleLogout()" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition-colors">Logout</button>
+                    </div>
+                `;
+            } else {
+                // User is signed out
+                desktopAuth.innerHTML = `
+                    <button class="hidden lg:block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" onclick="openAuthModal('login')">
+                        Login / SignUp
+                    </button>
+                `;
+                 mobileAuth.innerHTML = `
+                    <button class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" onclick="openAuthModal('login')">
+                        Login / SignUp
+                    </button>
+                `;
+            }
+            renderCareTeamPage(); // Re-render care team page on auth change
+        };
+
+        // --- AUTH HANDLERS ---
+        window.handleSignup = () => {
+            if (!auth) { showToast("Auth not configured"); return; }
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const errorDiv = document.getElementById('signup-error');
+            
+            if (!name || !email || !password) {
+                errorDiv.textContent = 'Please fill in all fields.';
+                return;
+            }
+            errorDiv.textContent = '';
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    return updateProfile(userCredential.user, { displayName: name });
+                })
+                .then(() => {
+                    closeAuthModal();
+                    showToast('Account created successfully!');
+                })
+                .catch((error) => {
+                    errorDiv.textContent = error.message;
+                });
+        };
+
+        window.handleLogin = () => {
+            if (!auth) { showToast("Auth not configured"); return; }
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+
+             if (!email || !password) {
+                errorDiv.textContent = 'Please fill in all fields.';
+                return;
+            }
+            errorDiv.textContent = '';
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    closeAuthModal();
+                    showToast('Logged in successfully!');
+                })
+                .catch((error) => {
+                    errorDiv.textContent = error.message;
+                });
+        };
+        
+        window.handleLogout = () => {
+            if (!auth) { showToast("Auth not configured"); return; }
+            signOut(auth).then(() => {
+                showToast('Logged out successfully.');
+                window.careTeam = []; // Clear care team on logout
+            }).catch((error) => {
+                console.error('Logout Error:', error);
+                showToast('Error logging out.');
+            });
+        };
+
+
+        // Listen for auth state changes
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                updateUIForAuthState(user);
+            });
+        } else {
+             updateUIForAuthState(null);
+        }
+
+    </script>
+    
+    <script>
+        // Ensure this script runs after the module script
+        const pages = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // State Management
+        let cart = {};
+        window.careTeam = []; // Global for simplicity
+        let pharmacyState = {
+            currentPage: 1,
+            productsPerPage: 9,
+            currentCategory: 'All',
+            currentTab: 'allopathy',
+            filteredProducts: []
+        };
+        
+        // --- Data ---
+        const doctorData = [
+            { id: 'doc1', name: 'Dr. Anjali Sharma', specialty: 'Cardiologist', exp: 15, rating: '★★★★☆', reviews: 124, wait: 45, fee: 800, isOnline: true, clinic: 'City Heart Care, Gwalior', services: ['ECG', 'Echocardiogram', 'Angioplasty Consultation'], feedback: 'Very knowledgeable and patient.' },
+            { id: 'doc2', name: 'Dr. Rohan Patel', specialty: 'Orthopedic Surgeon', exp: 12, rating: '★★★★★', reviews: 98, wait: 25, fee: 700, isOnline: false, clinic: 'Bone & Joint Clinic, Gwalior', services: ['Fracture Care', 'Knee Replacement Advice', 'Arthroscopy'], feedback: 'Excellent surgeon, helped me recover quickly.' },
+            { id: 'doc3', name: 'Dr. Meera Desai', specialty: 'Dermatologist', exp: 8, rating: '★★★★☆', reviews: 210, wait: 30, fee: 600, isOnline: true, clinic: 'Skin & Hair Aesthetics, Gwalior', services: ['Acne Treatment', 'Laser Hair Removal', 'Anti-Aging'], feedback: 'My skin has never been better!' },
+            { id: 'doc4', name: 'Dr. Vikram Singh', specialty: 'General Physician', exp: 20, rating: '★★★★★', reviews: 350, wait: 15, fee: 500, isOnline: true, clinic: 'Family Health Clinic, Gwalior', services: ['General Checkup', 'Vaccinations', 'Diabetes Management'], feedback: 'Our family doctor for years. Highly trusted.' },
+            { id: 'doc5', name: 'Dr. Priya Kapoor', specialty: 'Pediatrician', exp: 10, rating: '★★★★★', reviews: 180, wait: 20, fee: 650, isOnline: false, clinic: 'Happy Kids Clinic, Gwalior', services: ['Child Vaccinations', 'Newborn Care', 'Growth Monitoring'], feedback: 'Amazing with kids.' },
+            { id: 'doc6', name: 'Dr. Sameer Verma', specialty: 'Neurologist', exp: 18, rating: '★★★★☆', reviews: 88, wait: 50, fee: 900, isOnline: true, clinic: 'Mind & Nerve Center, Gwalior', services: ['Migraine Treatment', 'Stroke Management', 'Epilepsy Care'], feedback: 'Very thorough and explains everything.' },
+        ];
+
+
+        function navigateTo(pageId, clickedLink = null, subPage = null) {
+            document.body.style.opacity = 0;
+            setTimeout(() => {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                if (clickedLink) {
+                    clickedLink.classList.add('active');
+                } else {
+                    const correspondingLink = Array.from(navLinks).find(link => link.getAttribute('onclick').includes(`'${pageId}'`));
+                    if (correspondingLink) {
+                        correspondingLink.classList.add('active');
+                    } else if(pageId === 'home') {
+                        navLinks[0].classList.add('active');
+                    }
+                }
+                
+                if (pageId === 'pharmacy' && subPage) {
+                    const tabButton = document.querySelector(`.pharmacy-tab[onclick*="'${subPage}'"]`);
+                    if (tabButton) switchPharmacyTab(subPage, tabButton);
+                }
+
+                if (pageId === 'cart') { renderCart(); }
+                if (pageId === 'my_care_team') { renderCareTeamPage(); }
+
+                mobileMenu.classList.add('hidden');
+                window.scrollTo(0, 0);
+                document.body.style.opacity = 1;
+                document.body.style.transition = 'opacity 0.3s ease-in-out';
+            }, 300);
+        }
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Dr. Ruth Chat ---
+        const drRuthModal = document.getElementById('dr-ruth-chat-modal');
+        const drRuthModalContent = drRuthModal.querySelector('div');
+
+        function openDrRuthChat() {
+            drRuthModal.classList.remove('opacity-0', 'pointer-events-none');
+            drRuthModalContent.classList.remove('scale-95');
+        }
+
+        function closeDrRuthChat() {
+            drRuthModal.classList.add('opacity-0');
+            drRuthModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                drRuthModal.classList.add('pointer-events-none');
+            }, 300);
+        }
+        
+        async function chatWithDrRuth() {
+            const chatInput = document.getElementById('dr-ruth-input');
+            const chatWindow = document.getElementById('dr-ruth-chat-window');
+            const sendButton = document.getElementById('dr-ruth-send-button');
+            const userQuery = chatInput.value;
+
+            if (!userQuery.trim()) return;
+
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'chat-bubble-user p-3 rounded-lg max-w-md';
+            userMessageDiv.textContent = userQuery;
+            chatWindow.appendChild(userMessageDiv);
+            chatInput.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'chat-bubble-ai p-3 rounded-lg max-w-md flex items-center gap-3';
+            loadingDiv.innerHTML = '<div class="loader"></div><p>Typing...</p>';
+            chatWindow.appendChild(loadingDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            sendButton.disabled = true;
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `You are Dr. Ruth, a highly advanced, empathetic, and knowledgeable AI medical assistant from D&A Healthcare...`; // Same prompt as before
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error('API request failed');
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                let responseText = "Sorry, I couldn't process that. Please try asking in a different way.";
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    responseText = candidate.content.parts[0].text.replace(/\n/g, '<br>').replace(/\*\*\*(.*?)\*\*\*/g, '<br><br><strong class="text-xs text-red-600">$1</strong>');
+                }
+                loadingDiv.innerHTML = responseText;
+
+            } catch (error) {
+                console.error("Dr. Ruth API Error:", error);
+                loadingDiv.innerHTML = "I'm having trouble connecting right now. Please try again later.";
+            } finally {
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                sendButton.disabled = false;
+            }
+        }
+        
+        document.getElementById('dr-ruth-input').addEventListener('keypress', function (e) { if (e.key === 'Enter') chatWithDrRuth(); });
+
+        // --- Gemini API Symptom Analyzer ---
+        async function analyzeSymptoms() { /* ... same as before ... */ }
+        
+        // --- Gemini AI Lab Report Analyzer ---
+        const aiAnalysisModal = document.getElementById('ai-analysis-modal');
+        const aiAnalysisContent = document.getElementById('ai-analysis-content');
+        
+        function openAiAnalysisModal() {
+            aiAnalysisModal.classList.remove('opacity-0', 'pointer-events-none');
+            aiAnalysisModal.querySelector('div').classList.remove('scale-95');
+        }
+
+        function closeAiAnalysisModal() {
+            aiAnalysisModal.classList.add('opacity-0');
+            aiAnalysisModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => { aiAnalysisModal.classList.add('pointer-events-none'); }, 300);
+        }
+        
+        async function analyzeLabReport(reportId) {
+            const reportData = {
+                cbc: "Complete Blood Count Report. Hemoglobin: 14.5 g/dL (Normal: 13.5-17.5). Platelets: 250,000 /mcL (Normal: 150,000-450,000). WBC Count: 7,500 /mcL (Normal: 4,500-11,000)."
+            };
+            
+            aiAnalysisContent.innerHTML = '<div class="flex items-center gap-3"><div class="loader"></div><p>AI is analyzing your lab report...</p></div>';
+            openAiAnalysisModal();
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const systemPrompt = "You are an AI medical assistant. Summarize the provided lab report for a patient in simple, easy-to-understand language. Do not diagnose. Highlight any values outside the normal range and suggest consulting a doctor to discuss the results. Format the key findings as a bulleted list.";
+            
+            const payload = {
+                contents: [{ parts: [{ text: `Here is the lab report data: ${reportData[reportId]}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error('API request failed');
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text;
+                aiAnalysisContent.innerHTML = text.replace(/\* /g, '</li><li class="mt-2">').replace(/\n/g, '<br>');
+            } catch (error) {
+                console.error("Lab Report Analysis Error:", error);
+                aiAnalysisContent.innerHTML = "<p class='text-red-500'>Sorry, the analysis could not be completed at this time.</p>";
+            }
+        }
+        window.analyzeLabReport = analyzeLabReport;
+
+        function switchRecordsTab(tabId, clickedTab) { /* ... same as before ... */ }
+
+        // --- Pharmacy Data and Functions ---
+        const medicineData = {
+            allopathy: [
+                // Pain Relief
+                { id: 'allo1', name: 'Crocin Pain Relief Tablet', manufacturer: 'GSK', desc: 'strip of 15 tablets', price: 58.50, category: 'Pain Relief' },
+                { id: 'allo4', name: 'Brufen 400 Tablet', manufacturer: 'Abbott', desc: 'strip of 15 tablets', price: 18.23, category: 'Pain Relief' },
+                { id: 'allo9', name: 'Voveran 50mg Tablet', manufacturer: 'Novartis', desc: 'strip of 10 tablets', price: 95.00, category: 'Pain Relief' },
+                { id: 'allo10', name: 'Moov Pain Relief Spray', manufacturer: 'Reckitt', desc: 'bottle of 55 gm', price: 215.00, category: 'Pain Relief' },
+                { id: 'allo21', name: 'Sumo Tablet', manufacturer: 'Alkem', desc: 'strip of 15 tablets', price: 115.00, category: 'Pain Relief' },
+                
+                // Cardiac Care
+                { id: 'allo17', name: 'Ecosprin 75 Tablet', manufacturer: 'USV', desc: 'strip of 14 tablets', price: 6.50, category: 'Cardiac Care' },
+                { id: 'allo22', name: 'Clopitab 75 Tablet', manufacturer: 'Lupin', desc: 'strip of 15 tablets', price: 98.00, category: 'Cardiac Care' },
+                { id: 'allo23', name: 'Atorva 10 Tablet', manufacturer: 'Zydus', desc: 'strip of 15 tablets', price: 120.00, category: 'Cardiac Care' },
+
+                // Stomach Care
+                { id: 'allo5', name: 'Pan 40 Tablet', manufacturer: 'Alkem', desc: 'strip of 15 tablets', price: 145.00, category: 'Stomach Care' },
+                { id: 'allo24', name: 'Digene Acidity & Gas Relief Tablet', manufacturer: 'Abbott', desc: 'strip of 15 tablets', price: 22.00, category: 'Stomach Care' },
+                { id: 'allo25', name: 'Omez 20mg Capsule', manufacturer: 'Dr. Reddy\'s', desc: 'strip of 20 capsules', price: 105.00, category: 'Stomach Care' },
+
+                // Vitamins & Supplements
+                { id: 'allo8', name: 'Revital H Woman Tablet', manufacturer: 'Sun Pharma', desc: 'strip of 30 tablets', price: 310.00, category: 'Vitamins & Supplements' },
+                { id: 'allo11', name: 'Shelcal 500 Tablet', manufacturer: 'Torrent', desc: 'strip of 15 tablets', price: 112.00, category: 'Vitamins & Supplements' },
+                { id: 'allo12', name: 'Neurobion Forte Tablet', manufacturer: 'Merck', desc: 'strip of 30 tablets', price: 34.00, category: 'Vitamins & Supplements' },
+                { id: 'allo13', name: 'Zincovit Tablet', manufacturer: 'Apex Labs', desc: 'strip of 15 tablets', price: 105.00, category: 'Vitamins & Supplements' },
+
+                // Diabetes Care
+                { id: 'allo6', name: 'Glycomet-GP 2 Tablet', manufacturer: 'USV', desc: 'strip of 15 tablets', price: 180.00, category: 'Diabetes Care' },
+                { id: 'allo7', name: 'Janumet 50/500 Tablet', manufacturer: 'MSD', desc: 'strip of 15 tablets', price: 450.00, category: 'Diabetes Care' },
+                { id: 'allo14', name: 'Accu-Chek Active Strips', manufacturer: 'Roche', desc: 'box of 50 strips', price: 925.00, category: 'Diabetes Care' },
+                
+                // Skin Care
+                { id: 'allo18', name: 'Betnovate-N Cream', manufacturer: 'GSK', desc: 'tube of 20 gm', price: 55.00, category: 'Skin Care' },
+                { id: 'allo26', name: 'Sebamed Clear Face Gel', manufacturer: 'Sebamed', desc: 'tube of 50 ml', price: 476.00, category: 'Skin Care' },
+                { id: 'allo27', name: 'Cetaphil Gentle Skin Cleanser', manufacturer: 'Galderma', desc: 'bottle of 250 ml', price: 545.00, category: 'Skin Care' },
+
+                // Personal Care (Allergy, Antibiotics etc)
+                { id: 'allo2', name: 'Azithral 500 Tablet', manufacturer: 'Alembic', desc: 'strip of 5 tablets', price: 119.50, category: 'Personal Care' },
+                { id: 'allo3', name: 'Allegra 120mg Tablet', manufacturer: 'Sanofi', desc: 'strip of 10 tablets', price: 205.00, category: 'Personal Care' },
+                { id: 'allo28', name: 'Meftal-Spas Tablet', manufacturer: 'Blue Cross', desc: 'strip of 10 tablets', price: 49.00, category: 'Personal Care' },
+
+                // Baby Care
+                { id: 'allo15', name: 'Himalaya Baby Powder', manufacturer: 'Himalaya', desc: 'bottle of 400 gm', price: 260.00, category: 'Baby Care' },
+                { id: 'allo16', name: 'Johnson\'s Baby Soap', manufacturer: 'J&J', desc: 'pack of 4 x 100 gm', price: 300.00, category: 'Baby Care' },
+            ],
+            ayurveda: [
+                 // Herbal Wellness
+                { id: 'ayur1', name: 'Himalaya Ashvagandha Tablet', manufacturer: 'Himalaya', desc: 'bottle of 60 tablets', price: 165.00, category: 'Herbal Wellness' },
+                { id: 'ayur3', name: 'Patanjali Giloy Ghanvati', manufacturer: 'Patanjali', desc: 'bottle of 40 tablets', price: 100.00, category: 'Herbal Wellness' },
+                { id: 'ayur4', name: 'Himalaya Liv. 52 DS Tablet', manufacturer: 'Himalaya', desc: 'bottle of 60 tablets', price: 150.00, category: 'Herbal Wellness' },
+                { id: 'ayur5', name: 'Zandu Pancharishta', manufacturer: 'Zandu', desc: 'bottle of 450 ml', price: 140.00, category: 'Herbal Wellness' },
+                
+                // Vitamins & Supplements
+                { id: 'ayur2', name: 'Dabur Chyawanprash', manufacturer: 'Dabur', desc: 'jar of 1 kg', price: 350.00, category: 'Vitamins & Supplements' },
+                { id: 'ayur6', name: 'Baidyanath Shankhpushpi Syrup', manufacturer: 'Baidyanath', desc: 'bottle of 450 ml', price: 180.00, category: 'Vitamins & Supplements' },
+            ],
+            homeopathy: [
+                // Homeopathic Remedies
+                { id: 'home1', name: 'SBL Arnica Montana Dilution 30 CH', manufacturer: 'SBL', desc: 'bottle of 30 ml', price: 85.00, category: 'Homeopathic Remedies' },
+                { id: 'home2', name: 'Dr. Reckeweg R9 Cough Drop', manufacturer: 'Dr. Reckeweg', desc: 'bottle of 22 ml', price: 235.00, category: 'Homeopathic Remedies' },
+                { id: 'home3', name: 'SBL Nux Vomica Dilution 200 CH', manufacturer: 'SBL', desc: 'bottle of 30 ml', price: 90.00, category: 'Homeopathic Remedies' },
+                { id: 'home4', name: 'Adel 20 Proaller Drop', manufacturer: 'Adel', desc: 'bottle of 20 ml', price: 250.00, category: 'Homeopathic Remedies' },
+            ]
+        };
+
+        function updateProductView() {
+            const { currentTab, currentCategory } = pharmacyState;
+            
+            let products = medicineData[currentTab];
+
+            if (currentCategory !== 'All') {
+                products = products.filter(p => p.category === currentCategory);
+            }
+            
+            pharmacyState.filteredProducts = products;
+            pharmacyState.currentPage = 1;
+            
+            renderPharmacyProducts();
+            renderPagination();
+        }
+
+        function filterByCategory(category, clickedLink) {
+            document.querySelectorAll('.category-link').forEach(link => link.classList.remove('active-category', 'font-semibold', 'text-teal-600'));
+            clickedLink.classList.add('active-category', 'font-semibold', 'text-teal-600');
+            pharmacyState.currentCategory = category;
+            updateProductView();
+        }
+
+        function renderPharmacyProducts() {
+            const { currentPage, productsPerPage, currentTab, filteredProducts } = pharmacyState;
+            const container = document.getElementById(`${currentTab}-content`);
+            if (!container) return;
+
+            container.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+            if (paginatedProducts.length === 0) {
+                 container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-10">No products found.</div>`;
+                 document.getElementById('product-count-message').textContent = 'No products match your criteria.';
+            } else {
+                paginatedProducts.forEach((product, index) => {
+                    container.innerHTML += `
+                        <div class="feature-card bg-white/80 rounded-xl p-4 flex flex-col text-left" style="animation-delay: ${index * 0.05}s;">
+                            <img src="https://placehold.co/200x200/ccfbf1/14b8a6?text=${product.name.split(' ')[0]}" alt="${product.name}" class="mx-auto mb-4 h-32 object-contain">
+                            <p class="text-xs text-slate-500">${product.manufacturer}</p>
+                            <h4 class="font-semibold text-slate-800 flex-grow mt-1 truncate" title="${product.name}">${product.name}</h4>
+                            <p class="text-sm text-slate-500 mt-1">${product.desc}</p>
+                            <p class="text-lg font-bold text-slate-900 my-2">₹${product.price.toFixed(2)}</p>
+                            <button class="w-full mt-auto bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600" onclick="addToCart('${product.id}', '${product.name}', ${product.price})">Add to Cart</button>
+                        </div>
+                    `;
+                });
+                document.getElementById('product-count-message').textContent = `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} products.`;
+            }
+        }
+        
+        function renderPagination() {
+            const { currentPage, productsPerPage, filteredProducts } = pharmacyState;
+            const paginationContainer = document.getElementById('pagination-container');
+            paginationContainer.innerHTML = '';
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+            if (totalPages <= 1) return;
+
+            // Prev button
+            const prevButton = document.createElement('button');
+            prevButton.innerHTML = `&laquo; Prev`;
+            prevButton.className = 'pagination-btn px-4 py-2 border rounded-lg bg-white hover:bg-slate-100';
+            prevButton.onclick = () => changePage(currentPage - 1);
+            if (currentPage === 1) prevButton.disabled = true;
+            paginationContainer.appendChild(prevButton);
+            
+            // Page number buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.innerText = i;
+                pageButton.className = `pagination-btn px-4 py-2 border rounded-lg ${currentPage === i ? 'bg-teal-500 text-white' : 'bg-white hover:bg-slate-100'}`;
+                pageButton.onclick = () => changePage(i);
+                paginationContainer.appendChild(pageButton);
+            }
+
+            // Next button
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = `Next &raquo;`;
+            nextButton.className = 'pagination-btn px-4 py-2 border rounded-lg bg-white hover:bg-slate-100';
+            nextButton.onclick = () => changePage(currentPage + 1);
+            if (currentPage === totalPages) nextButton.disabled = true;
+            paginationContainer.appendChild(nextButton);
+        }
+        
+        function changePage(page) {
+            const totalPages = Math.ceil(pharmacyState.filteredProducts.length / pharmacyState.productsPerPage);
+            if (page < 1 || page > totalPages) return;
+            pharmacyState.currentPage = page;
+            renderPharmacyProducts();
+            renderPagination();
+        }
+
+        function switchPharmacyTab(tabId, clickedTab) {
+            document.querySelectorAll('#pharmacy .pharmacy-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.pharmacy-content').forEach(content => content.classList.remove('active'));
+            clickedTab.classList.add('active');
+            document.getElementById(`${tabId}-content`).classList.add('active');
+            
+            pharmacyState.currentTab = tabId;
+            pharmacyState.currentCategory = 'All';
+
+            document.querySelectorAll('.category-link').forEach(link => link.classList.remove('active-category', 'font-semibold', 'text-teal-600'));
+            const showAllLink = document.querySelector('.category-link');
+            if(showAllLink) showAllLink.classList.add('active-category', 'font-semibold', 'text-teal-600');
+
+            updateProductView();
+        }
+
+        // --- Cart Functions ---
+        window.addToCart = (productId, productName, price) => {
+            if (cart[productId]) {
+                cart[productId].quantity += 1;
+            } else {
+                cart[productId] = { name: productName, price: price, quantity: 1 };
+            }
+            updateCartCount();
+            showToast(`${productName} added to cart`);
+        };
+        function updateCartQuantity(productId, change) {
+            if (cart[productId]) {
+                cart[productId].quantity += change;
+                if (cart[productId].quantity <= 0) delete cart[productId];
+                renderCart();
+                updateCartCount();
+            }
+        }
+        
+        function removeFromCart(productId) {
+            if (cart[productId]) {
+                delete cart[productId];
+                renderCart();
+                updateCartCount();
+            }
+        }
+
+        function updateCartCount() {
+            const count = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+            const uniqueItems = Object.keys(cart).length;
+            document.getElementById('cart-count').innerText = uniqueItems;
+        }
+
+        function renderCart() {
+            const cartContainer = document.getElementById('cart-items-container');
+            const cartSummaryContainer = document.getElementById('cart-summary');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            cartContainer.innerHTML = '';
+            const cartItems = Object.keys(cart);
+
+            if (cartItems.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartSummaryContainer.style.display = 'none';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            cartSummaryContainer.style.display = 'block';
+            let subtotal = 0;
+
+            cartItems.forEach(productId => {
+                const item = cart[productId];
+                subtotal += item.price * item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.className = 'flex items-center justify-between bg-white p-4 rounded-lg shadow-sm';
+                itemElement.innerHTML = `
+                    <div class="flex-grow">
+                        <p class="font-semibold">${item.name}</p>
+                        <p class="text-sm text-slate-500">₹${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="bg-slate-200 w-8 h-8 rounded-full font-bold" onclick="updateCartQuantity('${productId}', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="bg-slate-200 w-8 h-8 rounded-full font-bold" onclick="updateCartQuantity('${productId}', 1)">+</button>
+                    </div>
+                    <div class="text-right w-24 ml-4">
+                        <p class="font-bold">₹${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                     <button class="ml-4 text-red-500 hover:text-red-700" onclick="removeFromCart('${productId}')">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+                `;
+                cartContainer.appendChild(itemElement);
+            });
+            
+            const deliveryFee = 40.00;
+            const total = subtotal + deliveryFee;
+            cartSummaryContainer.innerHTML = `
+                <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between"><p>Subtotal</p><p class="font-semibold">₹${subtotal.toFixed(2)}</p></div>
+                    <div class="flex justify-between"><p>Delivery Fee</p><p class="font-semibold">₹${deliveryFee.toFixed(2)}</p></div>
+                    <div class="border-t my-2"></div>
+                    <div class="flex justify-between text-lg font-bold"><p>Total</p><p>₹${total.toFixed(2)}</p></div>
+                </div>
+                <button class="w-full mt-6 bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600">Proceed to Checkout</button>
+            `;
+            lucide.createIcons();
+        }
+
+        // --- My Care Team ---
+        function toggleCareTeamMember(doctorId, buttonEl) {
+            const user = window.auth ? window.auth.currentUser : null;
+            if (!user) {
+                showToast('Please login to add doctors to your Care Team.');
+                openAuthModal('login');
+                return;
+            }
+
+            const doctor = doctorData.find(d => d.id === doctorId);
+            if (!doctor) return;
+            
+            const index = window.careTeam.findIndex(d => d.id === doctorId);
+            if (index > -1) {
+                window.careTeam.splice(index, 1); // Remove
+                buttonEl.classList.remove('favorited');
+                showToast(`${doctor.name} removed from your Care Team.`);
+            } else {
+                window.careTeam.push(doctor); // Add
+                buttonEl.classList.add('favorited');
+                showToast(`${doctor.name} added to your Care Team.`);
+            }
+        }
+        window.toggleCareTeamMember = toggleCareTeamMember;
+
+        function renderCareTeamPage() {
+            const container = document.getElementById('care-team-container');
+            const user = window.auth ? window.auth.currentUser : null;
+
+            if (!user) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i data-lucide="users" class="w-24 h-24 mx-auto text-slate-300"></i>
+                        <p class="mt-4 text-xl text-slate-500">Login to manage your Care Team.</p>
+                        <button class="mt-6 bg-teal-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-teal-600" onclick="openAuthModal('login')">Login Now</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            if (window.careTeam.length === 0) {
+                 container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i data-lucide="heart" class="w-24 h-24 mx-auto text-slate-300"></i>
+                        <p class="mt-4 text-xl text-slate-500">You haven't added any doctors yet.</p>
+                        <p class="text-slate-600">Click the heart icon on a doctor's profile to add them to your team.</p>
+                        <button class="mt-6 bg-teal-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-teal-600" onclick="navigateTo('appointments')">Find Doctors</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            let content = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
+            window.careTeam.forEach(doc => {
+                 content += `
+                    <div class="doctor-card rounded-xl p-6 flex flex-col cursor-pointer" onclick="viewDoctorProfile('${doc.id}')">
+                         <div class="flex items-start">
+                            <img src="https://placehold.co/80x80/d1d5db/374151?text=Dr.${doc.name.split(' ')[1][0]}" alt="Doctor Photo" class="w-20 h-20 rounded-full mr-4 border-2 border-teal-200">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">${doc.name}</h3>
+                                <p class="text-teal-600 font-medium">${doc.specialty}</p>
+                                <p class="text-slate-500">${doc.exp} years exp.</p>
+                            </div>
+                         </div>
+                         <div class="mt-auto pt-4">
+                            <button class="w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">Book Now</button>
+                         </div>
+                    </div>
+                `;
+            });
+            content += '</div>';
+            container.innerHTML = content;
+        }
+
+        function renderDoctorCards() {
+            const container = document.getElementById('doctor-listing-container');
+            container.innerHTML = '';
+            doctorData.forEach((doc, index) => {
+                const isFavorited = window.careTeam.some(d => d.id === doc.id);
+                container.innerHTML += `
+                    <div class="doctor-card rounded-xl p-6 flex flex-col cursor-pointer" style="animation-delay: ${index * 0.05}s;" onclick="viewDoctorProfile('${doc.id}')">
+                         <div class="flex items-start">
+                            <div class="relative">
+                                <img src="https://placehold.co/80x80/d1d5db/374151?text=Dr.${doc.name.split(' ')[1][0]}" alt="Doctor Photo" class="w-20 h-20 rounded-full border-2 border-teal-200">
+                                ${doc.isOnline ? '<div class="online-indicator absolute bottom-1 right-1"></div>' : ''}
+                            </div>
+                            <div class="flex-grow ml-4">
+                                <h3 class="text-xl font-bold text-slate-800">${doc.name}</h3>
+                                <p class="text-teal-600 font-medium">${doc.specialty}</p>
+                                <p class="text-slate-500">${doc.exp} years exp.</p>
+                                ${doc.isOnline ? '<p class="text-green-600 font-semibold text-sm mt-1">Online Now</p>' : ''}
+                            </div>
+                            <button class="care-team-btn ${isFavorited ? 'favorited' : ''}" onclick="event.stopPropagation(); toggleCareTeamMember('${doc.id}', this)">
+                                <i data-lucide="heart" class="w-6 h-6 text-slate-400 transition-colors"></i>
+                            </button>
+                         </div>
+                         <div class="border-t my-4"></div>
+                         <div class="text-sm text-slate-600 space-y-2">
+                            <p><span class="font-semibold">Waiting:</span> ~${doc.wait} min</p>
+                            <p><span class="font-semibold">Fee:</span> ₹${doc.fee}</p>
+                         </div>
+                         <div class="mt-auto pt-4">
+                            <button class="w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600">Book Appointment</button>
+                         </div>
+                    </div>
+                `;
+            });
+             lucide.createIcons();
+        }
+
+        function viewDoctorProfile(doctorId) {
+            const doctor = doctorData.find(d => d.id === doctorId);
+            if (!doctor) return;
+
+            const profileContainer = document.getElementById('doctor-profile-content');
+            const isFavorited = window.careTeam.some(d => d.id === doctor.id);
+            profileContainer.innerHTML = `
+                <button onclick="navigateTo('appointments')" class="mb-4 flex items-center gap-2 text-teal-600 font-semibold hover:underline">
+                    <i data-lucide="arrow-left"></i> Back to Doctors
+                </button>
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="flex flex-col md:flex-row items-start gap-8">
+                        <div class="relative">
+                           <img src="https://placehold.co/120x120/d1d5db/374151?text=Dr.${doctor.name.split(' ')[1][0]}" alt="Doctor Photo" class="w-32 h-32 rounded-full border-4 border-teal-200">
+                           ${doctor.isOnline ? '<div class="online-indicator absolute bottom-2 right-2 w-4 h-4"></div>' : ''}
+                        </div>
+                        <div class="flex-grow">
+                             <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-3xl font-bold text-slate-800">${doctor.name}</h2>
+                                    <p class="text-xl text-teal-600 font-medium mt-1">${doctor.specialty}</p>
+                                    <p class="text-slate-500">${doctor.exp} years of experience</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-yellow-500">${doctor.rating}</span>
+                                        <span class="text-sm text-slate-500 ml-2">(${doctor.reviews} reviews)</span>
+                                    </div>
+                                </div>
+                                <button class="care-team-btn ${isFavorited ? 'favorited' : ''}" onclick="toggleCareTeamMember('${doctor.id}', this); this.classList.toggle('favorited')">
+                                    <i data-lucide="heart" class="w-8 h-8 text-slate-400 transition-colors"></i>
+                                </button>
+                            </div>
+                            ${doctor.isOnline ? '<p class="mt-4 inline-flex items-center gap-2 bg-green-100 text-green-800 font-semibold px-3 py-1 rounded-full"><span class="w-2 h-2 bg-green-500 rounded-full"></span>Online Now for Video Consultation</p>' : ''}
+                        </div>
+                    </div>
+                    <div class="border-t my-6"></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Clinic Details</h3>
+                        <p class="text-slate-600 flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-slate-500"></i> ${doctor.clinic}</p>
+                        <p class="text-slate-600 mt-2 flex items-center gap-3"><i data-lucide="wallet" class="w-5 h-5 text-slate-500"></i> ₹${doctor.fee} Consultation Fee</p>
+                    </div>
+                     <div class="border-t my-6"></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Services</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${doctor.services.map(service => `<span class="bg-teal-100 text-teal-800 text-sm font-medium px-3 py-1 rounded-full">${service}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="border-t my-6"></div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">Patient Feedback</h3>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                             <p class="text-slate-600 italic">"${doctor.feedback}"</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <button class="w-full md:w-auto bg-teal-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-teal-600">Book Appointment</button>
+                    </div>
+                </div>
+            `;
+            navigateTo('doctor_profile');
+            lucide.createIcons();
+        }
+        window.viewDoctorProfile = viewDoctorProfile;
+        
+        // --- Article Functions ---
+        const articleData = {
+            'nutrition101': {
+                title: '10 Simple Food Swaps for a Healthier You',
+                author: 'Dr. Meera Desai',
+                category: 'Nutrition',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Healthy+Eating',
+                content: `
+                    <h3>Swap White Rice for Brown Rice or Quinoa</h3>
+                    <p>White rice is a refined carbohydrate that can spike your blood sugar. Brown rice and quinoa are whole grains, rich in fiber, which aids digestion and keeps you feeling full longer.</p>
+                    <h3>Swap Sugary Drinks for Water or Herbal Tea</h3>
+                    <p>Fizzy drinks and packaged juices are loaded with empty calories and sugar. Hydrating with water is essential for every bodily function. Herbal teas offer flavor and health benefits without the sugar.</p>
+                    <h3>Swap Potato Chips for a Handful of Nuts</h3>
+                    <p>Instead of reaching for processed, high-salt snacks, choose almonds, walnuts, or other nuts. They are packed with healthy fats, protein, and fiber that provide sustained energy.</p>
+                `
+            },
+            'yoga101': {
+                title: "The Beginner's Guide to Starting a Yoga Practice",
+                author: 'Staff Writer',
+                category: 'Fitness',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Yoga',
+                content: `
+                    <h3>Start with the Basics</h3>
+                    <p>Don't try to jump into advanced poses. Begin with foundational poses like Mountain Pose (Tadasana), Downward-Facing Dog (Adho Mukha Svanasana), and Warrior II (Virabhadrasana II). Focus on your alignment and breathing.</p>
+                    <h3>Find a Good Teacher</h3>
+                    <p>Whether online or in-person, a qualified yoga instructor can guide you, correct your form, and prevent injuries. Look for beginner-friendly classes.</p>
+                    <h3>Listen to Your Body</h3>
+                    <p>Yoga is not about pushing yourself to the limit. It's about connecting with your body. If a pose feels painful, gently come out of it. Consistency is more important than intensity.</p>
+                `
+            },
+            'sleep101': {
+                title: 'How to Improve Your Sleep Quality Tonight',
+                author: 'Dr. Sameer Verma',
+                category: 'Mental Wellness',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Sleep',
+                content: `
+                    <h3>Create a Restful Environment</h3>
+                    <p>Your bedroom should be dark, quiet, and cool. Consider blackout curtains, earplugs, or a white noise machine to minimize disruptions.</p>
+                    <h3>Stick to a Schedule</h3>
+                    <p>Go to bed and wake up around the same time every day, even on weekends. This helps regulate your body's internal clock.</p>
+                    <h3>Limit Screen Time Before Bed</h3>
+                    <p>The blue light emitted by phones, tablets, and computers can interfere with melatonin production, a hormone that controls your sleep-wake cycle. Put away screens at least an hour before bed.</p>
+                `
+            },
+             'diabetes101': {
+                title: 'Managing Your Diabetes: A Daily Guide',
+                author: 'Dr. Vikram Singh',
+                category: 'Chronic Conditions',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Diabetes+Care',
+                content: `
+                    <h3>Monitor Your Blood Sugar Regularly</h3>
+                    <p>Consistent monitoring helps you understand how food, exercise, and medication affect your glucose levels. Work with your doctor to set target ranges.</p>
+                    <h3>Eat a Balanced Diet</h3>
+                    <p>Focus on non-starchy vegetables, lean proteins, and whole grains. Be mindful of carbohydrate intake and portion sizes to avoid blood sugar spikes.</p>
+                    <h3>Stay Active</h3>
+                    <p>Regular physical activity helps your body use insulin more efficiently. Aim for at least 30 minutes of moderate exercise, like brisk walking, most days of the week.</p>
+                `
+            },
+             'childcare101': {
+                title: 'Common Childhood Ailments and When to Worry',
+                author: 'Dr. Priya Kapoor',
+                category: 'Pediatrics',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Child+Care',
+                content: `
+                    <h3>Fever</h3>
+                    <p>A low-grade fever is often the body's way of fighting infection. However, you should call a doctor if a fever is over 102°F (38.9°C), lasts more than three days, or is accompanied by other serious symptoms like a stiff neck or difficulty breathing.</p>
+                    <h3>Cough and Cold</h3>
+                    <p>Most colds are viral and resolve on their own. Seek medical advice if a cough is persistent and harsh (barking sound), or if your child has trouble breathing or is wheezing.</p>
+                    <h3>Stomach Upset</h3>
+                    <p>Vomiting and diarrhea are common but can lead to dehydration. Contact your pediatrician if your child shows signs of dehydration (like fewer wet diapers or no tears when crying), or if there's blood in the stool or vomit.</p>
+                `
+            },
+            'heart101': {
+                title: '5 Simple Lifestyle Changes for a Healthier Heart',
+                author: 'Dr. Anjali Sharma',
+                category: 'Cardiology',
+                image: 'https://placehold.co/800x400/a7f3d0/0f766e?text=Heart+Health',
+                content: `
+                    <h3>Eat a Heart-Healthy Diet</h3>
+                    <p>Reduce your intake of saturated fats, trans fats, and sodium. Load up on fruits, vegetables, whole grains, and lean proteins like fish and beans.</p>
+                    <h3>Get Moving</h3>
+                    <p>Aim for at least 150 minutes of moderate-intensity aerobic exercise per week. Activities like brisk walking, swimming, or cycling are excellent choices.</p>
+                    <h3>Manage Stress</h3>
+                    <p>Chronic stress can contribute to high blood pressure and other heart problems. Practice stress-reducing techniques like meditation, deep breathing, or spending time in nature.</p>
+                `
+            }
+        };
+
+        function renderArticleCards() {
+            const container = document.getElementById('articles-grid');
+            container.innerHTML = '';
+            let delay = 0;
+            for (const articleId in articleData) {
+                const article = articleData[articleId];
+                container.innerHTML += `
+                     <div class="article-card rounded-xl overflow-hidden flex flex-col cursor-pointer" style="animation-delay: ${delay * 0.1}s;" onclick="viewArticle('${articleId}')">
+                        <img src="${article.image}" alt="${article.title}" class="w-full h-48 object-cover">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <p class="text-sm text-teal-600 font-semibold">${article.category}</p>
+                            <h3 class="text-lg font-bold mt-2 text-slate-800 flex-grow">${article.title}</h3>
+                            <p class="mt-4 text-sm text-slate-500">By ${article.author}</p>
+                        </div>
+                    </div>
+                `;
+                delay++;
+            }
+        }
+
+        function viewArticle(articleId) {
+            const article = articleData[articleId];
+            if (!article) return;
+
+            const container = document.getElementById('article-detail-content');
+            container.innerHTML = `
+                 <button onclick="navigateTo('articles')" class="mb-6 flex items-center gap-2 text-teal-600 font-semibold hover:underline">
+                    <i data-lucide="arrow-left"></i> Back to Articles
+                </button>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <p class="text-teal-600 font-semibold">${article.category}</p>
+                    <h1 class="text-4xl font-bold text-slate-900 mt-2">${article.title}</h1>
+                    <p class="mt-4 text-slate-500">By ${article.author}</p>
+                    <img src="${article.image}" alt="${article.title}" class="w-full h-64 object-cover rounded-lg my-6">
+                    <div class="article-content text-slate-700">${article.content}</div>
+                </div>
+            `;
+            navigateTo('article_detail');
+            lucide.createIcons();
+        }
+        window.viewArticle = viewArticle;
+        
+        // --- Surgery Functions ---
+        const surgeryData = {
+            'cataract': {
+                name: 'Cataract Surgery',
+                imageText: 'Eye',
+                shortDesc: 'Advanced, blade-free laser cataract surgery for clear vision.',
+                price: 25000,
+                longDesc: 'Our advanced cataract surgery uses a high-precision laser to break up the cloudy lens and replaces it with a new, clear artificial lens. This procedure is quick, painless, and typically allows for a rapid recovery of vision.',
+                inclusions: ['Surgeon & Anesthetist Fees', 'Standard Lens', 'Hospital Stay for 3-4 Hours', 'Post-operative Kit'],
+                hospitals: ['City Eye Hospital', 'Gwalior Netra Chikitsalaya']
+            },
+            'septoplasty': {
+                name: 'Septoplasty',
+                imageText: 'Nose',
+                shortDesc: 'Surgical correction of a deviated septum to improve breathing.',
+                price: 45000,
+                longDesc: 'Septoplasty is a surgical procedure to straighten the bone and cartilage dividing the space between your two nostrils (septum). When the septum is crooked, it\'s known as a deviated septum, which can make it harder to breathe through your nose.',
+                inclusions: ['Surgeon & Anesthetist Fees', '1 Day Hospital Stay', 'All related medications', 'Follow-up consultation'],
+                hospitals: ['Global ENT Clinic', 'Apex Hospital']
+            },
+            'acl': {
+                name: 'ACL Tear Surgery',
+                imageText: 'Leg',
+                shortDesc: 'Minimally invasive arthroscopic surgery for ACL reconstruction.',
+                price: 75000,
+                longDesc: 'Anterior Cruciate Ligament (ACL) reconstruction is a surgical procedure to replace a torn ACL, a major ligament in your knee. The surgery uses a graft to replace the ligament, restoring stability and function to the knee.',
+                inclusions: ['Orthopedic Surgeon Fees', '1-2 Days Hospital Stay', 'Standard Implant', 'Initial Physiotherapy Session'],
+                hospitals: ['Gwalior Ortho Care', 'United Hospital']
+            },
+            'kidney_stones': {
+                name: 'Kidney Stones Removal',
+                imageText: 'Kidney',
+                shortDesc: 'Laser lithotripsy for breaking down kidney stones without cuts.',
+                price: 55000,
+                longDesc: 'Laser lithotripsy is a modern, minimally invasive procedure to treat kidney stones. A small scope is passed through the urinary tract to the stone, and a laser is used to break it into tiny pieces that can be easily passed or removed.',
+                inclusions: ['Urologist & Anesthetist Fees', '1 Day Hospital Stay', 'DJ Stent & Removal', 'Post-operative consultation'],
+                hospitals: ['Zenith Hospital', 'Gwalior Kidney Center']
+            }
+        };
+
+        function renderSurgeryCards() {
+            const container = document.getElementById('surgeries-grid');
+            if (!container) return;
+            container.innerHTML = '';
+            let delay = 0;
+            for (const surgeryId in surgeryData) {
+                const surgery = surgeryData[surgeryId];
+                container.innerHTML += `
+                    <div class="surgery-card p-6 rounded-xl flex flex-col text-center cursor-pointer" onclick="viewSurgeryDetails('${surgeryId}')">
+                        <img src="https://placehold.co/100x100/e0f2f1/0f766e?text=${surgery.imageText}" class="mx-auto rounded-full mb-4">
+                        <h3 class="font-bold text-lg text-slate-800 flex-grow">${surgery.name}</h3>
+                        <p class="text-sm text-slate-600 mt-2">${surgery.shortDesc}</p>
+                        <p class="text-xl font-bold text-teal-600 mt-4">Starts @ ₹${surgery.price.toLocaleString('en-IN')}</p>
+                         <button class="w-full mt-4 bg-teal-100 text-teal-800 font-bold py-2 rounded-lg hover:bg-teal-200">View Details</button>
+                    </div>
+                `;
+                delay++;
+            }
+        }
+
+        function viewSurgeryDetails(surgeryId) {
+            const surgery = surgeryData[surgeryId];
+            if (!surgery) return;
+
+            const container = document.getElementById('surgery-detail-content');
+            container.innerHTML = `
+                <button onclick="navigateTo('surgeries')" class="mb-6 flex items-center gap-2 text-teal-600 font-semibold hover:underline">
+                    <i data-lucide="arrow-left"></i> Back to Surgeries
+                </button>
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h1 class="text-4xl font-bold text-slate-900">${surgery.name}</h1>
+                            <p class="text-slate-600 mt-4 text-lg">${surgery.longDesc}</p>
+                            <p class="text-3xl font-bold text-teal-600 mt-6">Starting from ₹${surgery.price.toLocaleString('en-IN')}</p>
+                            <p class="text-sm text-slate-500">(Price may vary based on hospital choice and patient condition)</p>
+                            <button class="w-full mt-8 bg-teal-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-teal-600 text-lg">Book Free Consultation</button>
+                        </div>
+                        <div>
+                            <div class="bg-slate-50 p-6 rounded-lg">
+                                <h3 class="text-xl font-bold text-slate-800 mb-4">Package Inclusions</h3>
+                                <ul class="space-y-3">
+                                    ${surgery.inclusions.map(item => `
+                                        <li class="flex items-center gap-3 text-slate-600">
+                                            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+                                            <span>${item}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                             <div class="mt-6">
+                                <h3 class="text-xl font-bold text-slate-800 mb-4">Partner Hospitals in Gwalior</h3>
+                                <div class="flex flex-wrap gap-2">
+                                     ${surgery.hospitals.map(hospital => `<span class="bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">${hospital}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            navigateTo('surgery_detail');
+            lucide.createIcons();
+        }
+        window.viewSurgeryDetails = viewSurgeryDetails;
+
+
+        window.showToast = (message) => {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 bg-slate-900 text-white py-2 px-4 rounded-lg shadow-lg z-50';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateProductView();
+            renderDoctorCards();
+            renderCareTeamPage();
+            renderArticleCards();
+            renderSurgeryCards();
+        });
+    </script>
+</body>
+</html>
+
